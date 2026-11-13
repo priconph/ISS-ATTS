@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Testing</title>
+    @include('shared.css_links.css_links')
+</head>
+<style>
+    table, th, td {
+        border:1px solid black;
+    }
+    table {
+        /* width: 100%; */
+        border-collapse: collapse;
+    }
+</style>
+<body>
+
+    <div class="container">
+        <p>Please refer on the below for the System Testing as of {{ date('M Y') }}.</p>
+        {{-- {{ json_encode($data) }} --}}
+        <table class="table" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Control #.</th>
+                    <th>Project Name</th>
+                    <th>Requestor</th>
+                    <th>Requestor Dept/Section</th>
+                    <th>Request Type</th>
+                    <th>Timeline Start</th>
+                    <th>Timeline Due Date</th>
+                    <th>Testing Start</th>
+                    <th>Testing End Date</th>
+                    <th>Completion Date</th>
+                    <th>Project Status</th>
+                    <th>Programmer</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {{-- @php
+                    for ($i=0; $i < count($data); $i++) { 
+                        echo '
+                            <tr>
+                                <td>'.$data[0]["control_number"].'</td>
+                                <td>'.$data[0]["project_name"].'</td>
+                                <td>'.$data[0]->rapidx_requestor->name.'</td>
+                                <td>'.$data[0]->rapidx_section_department->department_name.'</td>
+                                <td>'.$data[0]["request_type"].'</td>
+                                <td>'.$data[0]["timeline_start_date"].'</td>
+                                <td>'.$data[0]["timeline_due_date"].'</td>
+                                <td>'.$data[0]["testing_start_date"].'</td>
+                                <td>'.$data[0]["testing_end_date"].'</td>
+                                <td>'.$data[0]["completion_date"].'</td>
+                                <td>'.$data[0]["project_status"].'</td>
+                                <td>'.$data[0]->rapidx_programmer->name.'</td>
+                            </tr>
+                        ';
+                    }
+                @endphp --}}
+                @foreach ($data as $row)
+                    <tr>
+                        <td>{{ $row['control_number'] }}</td>
+                        <td>{{ $row['project_name'] }}</td>
+                        <td>{{ $row->rapidx_requestor->name }}</td>
+                        <td>{{ $row->rapidx_section_department->department_name }}</td>
+                        <td>
+                            @if ($row['request_type'] == 1)
+                                System Development
+                            @else
+                                Change Request
+                            @endif
+                        </td>
+                        <td>
+                            {{ \Carbon\Carbon::create($row['timeline_start_date'])->toFormattedDateString()}}
+                        </td>
+                        <td>
+                            {{ \Carbon\Carbon::create($row['timeline_due_date'])->toFormattedDateString() }}
+                        </td>
+                        <td>
+                            {{ \Carbon\Carbon::create($row['testing_start_date'])->toFormattedDateString() }}
+                        </td>
+                        <td>
+                            {{ \Carbon\Carbon::create($row['testing_end_date'])->toFormattedDateString() }}
+                        </td>
+                        <td>
+                            {{ \Carbon\Carbon::create($row['completion_date'])->toFormattedDateString() }}
+                        </td>
+                        <td>
+                            @if ($row['project_status'] == 1)
+                                Pending
+                            @elseif ($row['project_status'] == 2)
+                                On-Going
+                            @elseif ($row['project_status'] == 3)
+                                Completed
+                            @elseif ($row['project_status'] == 4)
+                                Scheduled
+                            @elseif ($row['project_status'] == 5)
+                                On-hold
+                            @elseif ($row['project_status'] == 6)
+                                Deferred
+                            @endif
+                        </td>
+                        <td>{{ $row->rapidx_programmer->name }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <p>For more info, kindly please log-in to your RapidX account. Go to http://rapidx/RapidX</p>
+        <i>Disclaimer: This report is automatically generated by the System Development and Change Request Status System</i>
+    </div>
+    
+</body>
+</html>
